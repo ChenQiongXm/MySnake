@@ -3,6 +3,8 @@ package mySnake;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import javax.swing.JFrame;
 
@@ -18,6 +20,7 @@ public class MyFrame extends JFrame{
 	protected final static int WIDTH=(COL_NUMBER+8)*BLOCK_WIDTH;
 	protected final static int HEIGHT=(COW_NUMBER+8)*BLOCK_HEIGHT;
 	private Snake snake;
+	private LinkedList<Ball> balls=new LinkedList<Ball>();
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		MyFrame myFrame = new MyFrame();
@@ -27,6 +30,9 @@ public class MyFrame extends JFrame{
 		this.setSize(WIDTH, HEIGHT);
 		this.setLocation(300,300);
 		this.snake=new Snake();
+		Ball ball=new Ball();
+		balls.add(ball);
+		BallAndSnake deal=new BallAndSnake(snake, balls);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		this.addKeyListener(new KeyMonitor());
@@ -39,6 +45,11 @@ public class MyFrame extends JFrame{
 		System.out.println("ÖØÐÂ»­");
 		g.drawRect(BLOCK_WIDTH*4, BLOCK_HEIGHT*4, COL_NUMBER*BLOCK_WIDTH, COW_NUMBER*BLOCK_HEIGHT);
 		snake.draw(g);
+		Iterator<Ball> it=balls.iterator();
+		while(it.hasNext()){
+			Ball ball=it.next();
+			ball.draw(g);
+		}
 	}
 	private class PaintClass implements Runnable{
 		@Override
@@ -62,16 +73,16 @@ public class MyFrame extends JFrame{
 			System.out.println("key is pressed");
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_UP:
-				snake.move(Direction.UP);
+				snake.changeDir(Direction.UP);
 				break;
 			case KeyEvent.VK_DOWN:
-				snake.move(Direction.DOWN);
+				snake.changeDir(Direction.DOWN);
 				break;
 			case KeyEvent.VK_LEFT:
-				snake.move(Direction.LEFT);
+				snake.changeDir(Direction.LEFT);
 				break;
 			case KeyEvent.VK_RIGHT:
-				snake.move(Direction.RIGHT);
+				snake.changeDir(Direction.RIGHT);
 				break;
 			default:
 				break;
